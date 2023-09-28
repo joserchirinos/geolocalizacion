@@ -1,16 +1,20 @@
- trigger:
- - main
-
- pool:
-   vmImage: 'ubuntu-latest' 
-
- variables:
-   imageName: 'pipelines-javascript-docker'
-
- steps:
- - task: Docker@2
-   displayName: Build an image
-   inputs:
-     repository: $(imageName)
-     command: build
-     Dockerfile: app/Dockerfile
+kind: Deployment
+metadata:
+  name: laravel-kubernetes-demo
+spec:
+  selector:
+    matchLabels:
+      run: laravel-kubernetes-demo
+  template:
+    metadata:
+      labels:
+        run: laravel-kubernetes-demo
+    spec:
+      containers:
+        - name: demo
+          image: <my-username>/laravel-kubernetes-demo
+          ports:
+            - containerPort: 80
+          env:
+            - name: APP_KEY
+              value: base64:cUPmwHx4LXa4Z25HhzFiWCf7TlQmSqnt98pnuiHmzgY=
